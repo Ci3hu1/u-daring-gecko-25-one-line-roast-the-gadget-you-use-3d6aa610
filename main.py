@@ -24,6 +24,15 @@ DEFAULT_OUTPUT = "/output/entry.txt"
 MAX_CHARS = 200
 
 
+def is_one_sentence(text: str) -> bool:
+    """One sentence: ends with one sentence terminator, no earlier one."""
+    stripped = text.strip()
+    if not stripped.endswith((".", "!", "?")):
+        return False
+    body = stripped[:-1]
+    return not any(p in body for p in (".", "!", "?"))
+
+
 def main(argv) -> int:
     output_path = argv[1] if len(argv) > 1 else DEFAULT_OUTPUT
 
@@ -38,6 +47,9 @@ def main(argv) -> int:
         return 1
     if "\n" in LINE:
         print("entry must be a single line", file=sys.stderr)
+        return 1
+    if not is_one_sentence(LINE):
+        print("entry must be exactly one sentence", file=sys.stderr)
         return 1
 
     parent = os.path.dirname(output_path)

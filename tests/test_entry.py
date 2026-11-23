@@ -35,6 +35,11 @@ class TestOneLineEntry(unittest.TestCase):
         self.assertTrue(1 <= len(EXPECTED) <= 200)
         self.assertTrue(EXPECTED.strip())
         self.assertNotIn("\n", EXPECTED)
+        # exactly one sentence: ends with a terminator, none earlier
+        self.assertTrue(EXPECTED.strip().endswith("."))
+        self.assertNotIn(".", EXPECTED.strip()[:-1])
+        self.assertNotIn("!", EXPECTED.strip()[:-1])
+        self.assertNotIn("?", EXPECTED.strip()[:-1])
 
     def test_program_writes_exact_line(self):
         with tempfile.TemporaryDirectory() as tmp:
